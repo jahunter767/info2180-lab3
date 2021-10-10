@@ -36,13 +36,19 @@ window.onload = function(){
     board.style.display = "grid";
 
     function squareClickEvent(e){
-        var coord = e.target.id;
-        coord = coord.split("-").map(c => parseInt(c));
-        var mark = game.click(...coord);
+        var marked = TicTacToe.playerMarkers
+            .map(m => m == e.target.textContent)
+            .reduce((acc, m) => acc || m);
 
-        e.target.setAttribute("class", `${e.target.className} ${mark}`);
-        e.target.textContent = mark;
-        e.target.onclick = undefined;
+        if (!marked) {
+            var coord = e.target.id;
+            coord = coord.split("-").map(c => parseInt(c));
+            var mark = game.click(...coord);
+
+            e.target.setAttribute("class", `${e.target.className} ${mark}`);
+            e.target.textContent = mark;
+            e.target.onclick = undefined;
+        } // End-if
     } // End-squareClickEvent
 
     var s, i = 0, row, col;
@@ -51,8 +57,12 @@ window.onload = function(){
         row = (i - (i % 3)) / 3;
         s.setAttribute("class", "square");
         s.setAttribute("id", `${row}-${col}`);
-        s.onclick = squareClickEvent;
+        s.addEventListener("click", squareClickEvent);
+        s.addEventListener("mouseover", e =>
+            e.target.setAttribute("class", `${e.target.className} hover`));
+        s.addEventListener("mouseout", e =>
+            e.target.setAttribute("class", 
+                e.target.className.replace(" hover", "")));
         i++;
     } // End-for
-
 } // End-window.onload
