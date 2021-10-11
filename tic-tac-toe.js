@@ -123,8 +123,10 @@ class TicTacToe {
 
 window.onload = function(){
     var game = new TicTacToe();
+    let status = document.getElementById("status");
     let board = document.getElementById("board");
     let squares = board.children;
+    let resetBtn = document.getElementsByClassName("btn")[0];
 
     board.style.display = "grid";
 
@@ -143,7 +145,6 @@ window.onload = function(){
             e.target.textContent = gameStats.mark;
 
             if (gameStats.state == "W"){
-                let status = document.getElementById("status");
                 status.setAttribute("class", "you-won");
                 status.textContent = `Congratulations! ${gameStats.winner} is the Winner!`;
             }else if (gameStats.state == "D"){
@@ -159,11 +160,21 @@ window.onload = function(){
         s.setAttribute("class", "square");
         s.setAttribute("id", `${row}-${col}`);
         s.addEventListener("click", squareClickEvent);
-        s.addEventListener("mouseover", e =>
-            e.target.setAttribute("class", `${e.target.className} hover`));
-        s.addEventListener("mouseout", e =>
-            e.target.setAttribute("class",
-                e.target.className.replace(" hover", "")));
+        s.addEventListener("mouseover", ele =>
+            ele.target.setAttribute("class", `${ele.target.className} hover`));
+        s.addEventListener("mouseout", ele =>
+            ele.target.setAttribute("class",
+                ele.target.className.replace(" hover", "")));
         i++;
     } // End-for
+
+    resetBtn.addEventListener("click", ele => {
+        game = new TicTacToe();
+        status.setAttribute("class", "");
+        status.textContent = "Move your mouse over a square and click to play an X or an O.";
+        for (s of squares){
+            s.textContent = "";
+            s.setAttribute("class", "square");
+        } // End-for
+    });
 } // End-window.onload
